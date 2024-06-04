@@ -1,0 +1,49 @@
+/* index.html */
+.home-container {
+    text-align: center;
+    align-items: center;
+}
+
+.game-title {
+    font-family: "Monofett", monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 100px;
+    color: #E9C46A;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; 
+}
+
+.game-button {
+    background-color: #F4A261;
+    border-radius: 10px;
+    padding: 20px;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    margin: auto;
+}
+
+.game-button a {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    color: #FFFCF2;
+    text-decoration: none;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.game-icons {
+    color: #FFFCF2;
+    font-size: 22px;
+    margin-right: 10px;
+}
+
+/* new-game.html */

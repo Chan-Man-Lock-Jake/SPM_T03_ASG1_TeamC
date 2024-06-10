@@ -40,10 +40,14 @@
     text-align: left;
 }
 
+.game-button:hover {
+    background-color: #2A9D8F;
+}
+
 .game-icons {
     color: #FFFCF2;
     font-size: 22px;
     margin-right: 10px;
 }
 
-/* new-game.html */
+

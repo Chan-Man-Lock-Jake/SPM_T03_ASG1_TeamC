@@ -40,6 +40,10 @@
     text-align: left;
 }
 
+.game-button:hover {
+    background-color: #2A9D8F;
+}
+
 .game-icons {
     color: #FFFCF2;
     font-size: 22px;
@@ -47,16 +51,3 @@
 }
 
 /* new-game.html */
-
-/* arcade.html */
-/* #arcadeBoard {
-    width: 100px;
-    height: 100px;
-    background-color: #E9C46A;
-} */
-
-/* .tile {
-    width: 10px;
-    height: 10px;
-    background-color: #F4A261;
-} */

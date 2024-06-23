@@ -1,46 +1,87 @@
-/* index.html */
-.home-container {
-    text-align: center;
-    align-items: center;
+
+body {
+    background-color: #264653;
 }
 
+/* styling for containers */
+.home-container,
+.login-container,
+.login-form-container {
+    text-align: center;
+    justify-content: center;
+}
+
+/* styling for selecting game mode container */
+.new-game-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 25%;
+}
+
+/*styling for game title: Ngee Ann City */
 .game-title {
     font-family: "Monofett", monospace;
     font-weight: 400;
     font-style: normal;
     font-size: 100px;
     color: #E9C46A;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 .button-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px; 
+    gap: 10px; 
 }
 
-.game-button {
+.game-button,
+.new-game-button {
     background-color: #F4A261;
     border-radius: 10px;
     padding: 20px;
-    width: 40%;
+    width: 30%;
     display: flex;
     align-items: center;
     margin: auto;
+    margin-top: 10px;
 }
 
-.game-button a {
+.new-game-button {
+    width: 15%;
+}
+
+/* text styling */
+.text,
+.game-button a,
+.login-text,
+.new-game-button a {
     font-family: "Raleway", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    font-weight: 800;
-    font-size: 20px;
     color: #FFFCF2;
+    font-weight: 800;
+}
+
+.game-button a,
+.new-game-button a {
+    font-size: 20px;
     text-decoration: none;
     flex-grow: 1;
     text-align: left;
 }
 
-.game-button:hover {
+.new-game-button a {
+    text-align: center;
+}
+
+.login-text {
+    font-size: 60px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.game-button:hover,
+.new-game-button:hover {
     background-color: #2A9D8F;
 }
 
@@ -50,4 +91,57 @@
     margin-right: 10px;
 }
 
+/* styling for arcade mode */
 
+.arcade-container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #264653;
+    border-radius: 5px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(20, 40px);
+    grid-template-rows: repeat(20, 40px);
+    gap: 18px;
+    margin: 0 auto; /* Center the game board horizontally */
+    justify-content: center;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F4A261;
+    border: 1px solid black;
+    height: 40px;
+    width: 40px;
+}
+
+.building-options {
+    display: flex;
+    gap: 30px;
+    margin-top: 40px;
+    justify-content: center;
+}
+
+.building-option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.building-option.dragging {
+    opacity: 0.5;
+}

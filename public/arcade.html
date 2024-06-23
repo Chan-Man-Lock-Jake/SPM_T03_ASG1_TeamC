@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/style.css">
-    <title>Ngee Ann City</title>
 </head>
 <body>
-    <div id="arcadeBoard"></div>
-    <script src="/arcade.js"></script>
+    <div class="arcade-container">
+        <div class="stats">
+            <div>Coins: <span id="coins"></span></div>
+            <div>Score: <span id="score"></span></div>
+            <div>Turn: <span id="turn"></span></div>
+        </div>
+        <div id="game-board" class="game-board"></div>
+        <div id="building-options" class="building-options"></div>
+    </div>
+    <script src="scripts/arcade.js"></script>
 </body>
 </html>

@@ -9,21 +9,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let coins = 3;
     let score = 0;
     let turn = 0;
-    let grid = createGrid(20, 20);
+    //let grid = createGrid(20, 20); //CALLED TWICE
     let firstBuilding = true; // Track if it's the first building being placed
 
     const buildingTypes = ['R', 'I', 'C', 'O', '*'];
 
     // Creation of game board
     function createGrid(rows, cols) {
-        gameBoard.style.gridTemplateColumns = `repeat(${cols}, 25px)`;
-        gameBoard.style.gridTemplateRows = `repeat(${rows}, 25px)`;
-        gameBoard.innerHTML = '';
+        // gameBoard.style.gridTemplateColumns = `repeat(${cols}, 25px)`;
+        // gameBoard.style.gridTemplateRows = `repeat(${rows}, 25px)`;
+        // gameBoard.innerHTML = '';
         const grid = [];
         for (let row = 0; row < rows; row++) {
             const rowArr = [];
             for (let col = 0; col < cols; col++) {
                 const cell = document.createElement('div');
+                // cell.innerHTML = col;
                 cell.classList.add('cell');
                 cell.dataset.row = row;
                 cell.dataset.col = col;

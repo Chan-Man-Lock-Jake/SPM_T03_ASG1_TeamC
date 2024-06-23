@@ -105,27 +105,31 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 20px; 
     color: #fff;
 }
 
 .game-board {
-    display: grid;
-    grid-template-columns: repeat(20, 40px);
-    grid-template-rows: repeat(20, 40px);
-    gap: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    /* grid-template-columns: repeat(20, 40px);
+    grid-template-rows: repeat(20, 40px); */
+    /* gap: 1px; */
     margin: 0 auto; /* Center the game board horizontally */
     justify-content: center;
+    height: fit-content;
+    width: 840px;
 }
 
 .cell {
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: center;
     background-color: #F4A261;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     height: 40px;
     width: 40px;
+    margin: 1px;
 }
 
 .building-options {

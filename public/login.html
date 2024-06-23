@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Monofett font -->
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&family=Candal&family=Happy+Monkey&family=Monofett&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Questrial&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ruda:wght@400..900&family=Yeseva+One&display=swap" rel="stylesheet">
+    <script type="module" defer src="scripts/login.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <!--Welcome text-->
+        <p class="login-text">
+            WELCOME TO
+        </p>
+        <p class="game-title">
+            Ngee Ann City
+        </p>
+
+        <!--Login Form-->
+        <div class="login-form-container">
+            <form id="login-form">
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br>
+                <label for="password">Password:</label><br>
+                <input type="text" id="password" name="password" required>
+            </form>
+
+        </div>
+
+        <button id="signInButton">Sign In With Google</button>
+        <button id="signOutButton">Sign Out</button>
+
+        <div id="message">
+            <p>you have signed in.</p>
+        </div>
+    </div>
+</body>
+</html>

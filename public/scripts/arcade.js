@@ -12,12 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let grid = createGrid(20, 20);
     let firstBuilding = true; // Track if it's the first building being placed
 
+    // R = Residential
+    // I = Industry
+    // C = Commercial
+    // O = Park
+    // * = Road
     const buildingTypes = ['R', 'I', 'C', 'O', '*'];
 
     // Creation of game board
     function createGrid(rows, cols) {
-        gameBoard.style.gridTemplateColumns = `repeat(${cols}, 25px)`;
-        gameBoard.style.gridTemplateRows = `repeat(${rows}, 25px)`;
+        gameBoard.style.gridTemplateColumns = `repeat(${cols})`;
+        gameBoard.style.gridTemplateRows = `repeat(${rows})`;
         gameBoard.innerHTML = '';
         const grid = [];
         for (let row = 0; row < rows; row++) {

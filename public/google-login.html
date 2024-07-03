@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Monofett font -->
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&family=Candal&family=Happy+Monkey&family=Monofett&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Questrial&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ruda:wght@400..900&family=Yeseva+One&display=swap" rel="stylesheet">
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" defer></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" defer></script>
+    <script type="module" defer src="scripts/login.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Welcome text -->
+        <p class="welcome-text">WELCOME TO</p>
+        <p class="game-title">Ngee Ann City</p>
+    </div>
+
+    <!-- Login Form -->
+    <form class="login-form">
+        <label for="email" class="login-text">Email</label>
+        <input type="text" id="email" name="email" required>
+        <br><br>
+        <label for="password" class="login-text">Password</label>
+        <input type="text" id="password" name="password" required>
+        <button id="submit" class="login-button">
+            <a href="index.html">Login</a>
+        </button>
+    </form>
+
+        <button class="google-button">
+            <div class="game-icons">
+                <ion-icon name="logo-google" class="google-icon"></ion-icon>
+            </div>
+            <div id="signInButton" class="google-text">Sign in with Google</div>
+        </button>
+
+        <button id="signOutButton" class="google-login">Sign Out</button>
+    
+    <message id="message">
+        <p>You have signed in.</p>
+    </message>
+</body>
+</html>

@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let firstBuilding = true;
 
+    // R = Residential
+    // I = Industry
+    // C = Commercial
+    // O = Park
+    // * = Road
     const buildingTypes = ['R', 'I', 'C', 'O', '*'];
 
     // Checks if building placement is valid

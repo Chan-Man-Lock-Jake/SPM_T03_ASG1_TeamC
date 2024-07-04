@@ -127,11 +127,11 @@ body {
     border-radius: 5px;
 }
 
-.stats {
+.stats-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 20px; 
     color: #fff;
 }
 
@@ -145,7 +145,7 @@ body {
 }
 
 .cell {
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: center;
     background-color: #F4A261;

@@ -19,23 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // * = Road
     const buildingTypes = ['R', 'I', 'C', 'O', '*'];
 
-    // Checks if building placement is valid
-    function isValidPlacement(row, col) {
-        if (firstBuilding) return true; // Allow placing the first building anywhere
-        if (grid[row] && grid[row][col] && grid[row][col].textContent !== '') {
-            return false; // Cell is already occupied
-        }
-        const neighbors = [
-            { r: row - 1, c: col },
-            { r: row + 1, c: col },
-            { r: row, c: col - 1 },
-            { r: row, c: col + 1 }
-        ];
-        return neighbors.some(neighbor => {
-            return grid[neighbor.r] && grid[neighbor.r][neighbor.c] && grid[neighbor.r][neighbor.c].textContent !== '';
-        });
-    }
-
     //BreakPoint ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     function handleDragStart(e) {
@@ -74,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const rowArr = [];
             for (let col = 0; col < cols; col++) {
                 const cell = document.createElement('div');
-                // cell.innerHTML = `${row} ${col}`;
                 cell.classList.add('cell');
                 cell.dataset.row = row;
                 cell.dataset.col = col;
@@ -97,99 +79,178 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if ((type === 'R' && (neighbor.textContent === 'I' || neighbor.textContent === 'C')) || (neighbor.textContent === 'R' && (type === 'I' || type === 'C'))) {
                 coins += 1;
-            } 
+            }
         });
         coinsElement.textContent = coins;
     }
 
+    // function countScore(type, neighbors, row, col) {
+    //     let neighborsTxt = neighbors.map(neighbor => neighbor.textContent);
+
+    //     // Score is increased when:
+    //     // 1. Residential per Industry 
+    //     // 2. Residential per Residential
+    //     // 3. Residential per Commerical
+    //     // 4. Residential per Park 
+    //     // Done 5. Industry per Industry (itself is one point)
+    //     // 6. Commercial per Commercial (adjacent > 1)
+    //     // 7. Park per Park (adjacent > 1)
+    //     // Done 8. Road per Road (in a row > 1)
+
+    //     switch (type) {
+    //         // For Industry:
+    //         case 'I':
+    //             score += 1;
+    //             break;
+    //         // For Park:
+    //         case 'O':
+    //             //1.All sides have O
+    //             //1.1 0 sides of sides have O (+5)
+    //             //1.2 1 sides of sides have O (+4)
+    //             //1.3 2 sides of sides have O (+3)
+    //             //1.4 3 sides of sides have O (+2)
+    //             //1.5 ALL sides of sides have O (+1)
+    //             //2.Three sides have O
+    //             //2.1 0 sides of sides have O (+4)
+    //             //2.2 1 sides of sides have O (+3)
+    //             //2.3 2 sides of sides have O (+2)
+    //             //2.4 ALL sides of sides have O (+1)
+    //             //3 Two sides have O
+    //             //3.1 0 sides of sides have O (+3)
+    //             //3.2 1 sides of sides have O (+2)
+    //             //3.3 ALL sides of sides have O (+1)
+    //             //4 One sides have O
+    //             //4.1 0 sides of sides have O (+2)
+    //             //4.2 ALL sides of sides have O (+1)
+    //             //5 No sides have O (+0)
+    //             const adjacent = [
+    //                 [row - 1, col],
+    //                 [row, col - 1],
+    //                 [row, col + 1],
+    //                 [row + 1, col]
+    //             ];
+
+    //             for (const [adjX, adjY] of adjacent) {
+
+    //             }
+
+    //             break;
+    //         // For Road:
+    //         case '*':
+    //             // Case 1.0 Both side Road
+    //             if (neighbors[1].textContent === '*' && neighbors[2].textContent === '*') {
+    //                 // 1.1 Both side of side Nothing (+3)
+    //                 if ((grid[row][col - 2] === "Left Border" || grid[row][col - 2].textContent !== '*') && grid[row][col + 2].textContent !== '*') {
+    //                     score += 3;
+    //                 // 1.2 One side of side Nothing (+2)
+    //                 } else if (grid[row][col - 2].textContent !== '*' || grid[row][col + 2].textContent !== '*') {
+    //                     score += 2;
+    //                     console.log("first");
+    //                 // 1.3 No side of side Nothing (+1)
+    //                 } else {
+    //                     score += 1;
+    //                 }
+    //             // Case 2.0 One side Road
+    //             } else if (neighbors[1] === "Left Border" || !grid[row][col - 2]) {
+    //                 score += 1;
+    //                 console.log("left");
+    //             } else if (neighbors[1].textContent === '*' || neighbors[2].textContent === '*') { //BORDER
+    //                 // 2.1 Side of side Nothing (+2)
+    //                 if ((grid[row][col - 2].textContent !== '*' && neighbors[2].textContent !== '*') || (grid[row][col + 2].textContent !== '*' && neighbors[1].textContent !== '*')) {
+    //                     score += 2
+    //                     console.log("second");
+    //                 // 2.2 Side of side Road (+1)
+    //                 } else {
+    //                     score += 1;
+    //                 }
+    //             }
+    //             break;
+    //     }
+    //     scoreElement.textContent = score;
+    // }
+
     function countScore(type, neighbors, row, col) {
-        let neighborsTxt = neighbors.map(neighbor => neighbor.textContent);
-
-        // Score is increased when:
-        // 1. Residential per Industry 
-        // 2. Residential per Residential
-        // 3. Residential per Commerical
-        // 4. Residential per Park 
-        // Done 5. Industry per Industry (itself is one point)
-        // 6. Commercial per Commercial (adjacent > 1)
-        // 7. Park per Park (adjacent > 1)
-        // Done 8. Road per Road (in a row > 1)
-
+        let score = 0;
         switch (type) {
-            // For Industry:
+            case 'R':
+                score = countResidential(neighbors);
+                break;
             case 'I':
                 score += 1;
                 break;
-            // For Park:
-            case 'O':
-                //1.All sides have O
-                //1.1 0 sides of sides have O (+5)
-                //1.2 1 sides of sides have O (+4)
-                //1.3 2 sides of sides have O (+3)
-                //1.4 3 sides of sides have O (+2)
-                //1.5 ALL sides of sides have O (+1)
-                //2.Three sides have O
-                //2.1 0 sides of sides have O (+4)
-                //2.2 1 sides of sides have O (+3)
-                //2.3 2 sides of sides have O (+2)
-                //2.4 ALL sides of sides have O (+1)
-                //3 Two sides have O
-                //3.1 0 sides of sides have O (+3)
-                //3.2 1 sides of sides have O (+2)
-                //3.3 ALL sides of sides have O (+1)
-                //4 One sides have O
-                //4.1 0 sides of sides have O (+2)
-                //4.2 ALL sides of sides have O (+1)
-                //5 No sides have O (+0)
-                const adjacent = [
-                    [row - 1, col],
-                    [row, col - 1],
-                    [row, col + 1],
-                    [row + 1, col]
-                ];
-
-                for (const [adjX, adjY] of adjacent) {
-
-                }
-
+            case 'C' :
+                score = countCommercial(neighbors);
                 break;
-            // For Road:
+            case 'O':
+                score = countPark(neighbors);
+                break;
             case '*':
-                // Case 1.0 Both side Road
-                if (neighbors[1].textContent === '*' && neighbors[2].textContent === '*') {
-                    // 1.1 Both side of side Nothing (+3)
-                    if ((grid[row][col - 2] === "Left Border" || grid[row][col - 2].textContent !== '*') && grid[row][col + 2].textContent !== '*') {
-                        score += 3;
-                    // 1.2 One side of side Nothing (+2)
-                    } else if (grid[row][col - 2].textContent !== '*' || grid[row][col + 2].textContent !== '*') {
-                        score += 2;
-                        console.log("first");
-                    // 1.3 No side of side Nothing (+1)
-                    } else {
-                        score += 1;
-                    }
-                // Case 2.0 One side Road
-                } else if (neighbors[1] === "Left Border" || !grid[row][col - 2]) {
-                    score += 1;
-                    console.log("left");
-                } else if (neighbors[1].textContent === '*' || neighbors[2].textContent === '*') { //BORDER
-                    // 2.1 Side of side Nothing (+2)
-                    if ((grid[row][col - 2].textContent !== '*' && neighbors[2].textContent !== '*') || (grid[row][col + 2].textContent !== '*' && neighbors[1].textContent !== '*')) {
-                        score += 2
-                        console.log("second");
-                    // 2.2 Side of side Road (+1)
-                    } else {
-                        score += 1;
-                    }
-                }
+                score = countRoad(neighbors);
                 break;
         }
-        scoreElement.textContent = score;
+        grid[row][col].dataset.score = score;
+    }
+
+    function countResidential(neighbor) {
+        let score = 0;
+        for (let e = 0; e < 4; e++) {
+            if (neighbor[e] === 'I') {
+                score += 1;
+                break;
+            } else if (neighbor[e] === 'R' || neighbor[e] === 'C') {
+                score += 1;
+            } else if (neighbor[e] === 'O') {
+                score += 2;
+            }
+        }
+        return score;
+    }
+
+    function countCommercial(neighbor) {
+        let score = 0;
+        for (let e = 0; e < 4; e++) {
+            if (neighbor[e] === 'C') {
+                score += 1;
+            }
+        }
+        return score;
+    }
+
+    function countPark(neighbor) {
+        let score = 0;
+        for (let e = 0; e < 4; e++) {
+            if (neighbor[e] === 'O') {
+                score += 1;
+            }
+        }
+        return score;
+    }
+
+    function countRoad(neighbor) {
+        let score = 0;
+        for (let e = 0; e < 4; e++) {
+            if (neighbor[e] === '*' && (e === 1 || e === 2)) {
+                score += 1;
+            }
+        }
+        return score;
+
+    }
+
+    function totalScore() {
+        let totalScore = 0;
+        for(let e = 0; e < 20; e++) {
+            for(j = 0; j < 20; j++) {
+                totalScore += grid[e][j].dataset.score;
+            }
+        }
+        return totalScore
     }
 
     function addBuilding(row, col, type) {
         const cell = grid[row][col];
         cell.innerHTML = `${type}`;
+        cell.dataset.building = type;
         cell.classList.add('building');
 
         let neighbors = [
@@ -198,8 +259,21 @@ document.addEventListener('DOMContentLoaded', () => {
             col != 19 ? grid[row][col + 1] : "Right Border", //RIGHT
             row != 19 ? grid[row + 1][col] : "Bottom Border" //BOTTOM
         ];
+        console.log(neighbors);
 
         countScore(type, neighbors, row, col);
+        for (let i = 0; i < 4; i++) {
+            let neighbors2 = [
+                row != 0 ? grid[neighbors[i].dataset.row - 1][neighbors[i].dataset.col] : "Top Border", //TOP
+                col != 0 ? grid[neighbors[i].dataset.row][neighbors[i].dataset.col - 1] : "Left Border", //LEFT
+                col != 19 ? grid[neighbors[i].dataset.row][neighbors[i].dataset.col + 1] : "Right Border", //RIGHT
+                row != 19 ? grid[neighbors[i].dataset.row + 1][neighbors[i].dataset.col] : "Bottom Border" //BOTTOM
+            ];
+            console.log(neighbors2);
+            countScore(neighbors[e], neighbors2, row, col)
+        }
+
+        scoreElement.textContent = totalScore();
         countCoin(type, neighbors);
         coins -= 1;
     }

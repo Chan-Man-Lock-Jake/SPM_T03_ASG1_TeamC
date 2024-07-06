@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             // Create user with userData
-            const response = await fetch("http://localhost:4000/register", {
+            const response = await fetch("http://localhost:3000/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,10 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Account creation Successful!");
             
             // Redirect to login page after successful registration
-            window.location.href = "password-login.html";
+            window.location.href = "index.html";
         } catch (error) {
             console.error("Error creating user:", error);
-            alert("Account creation failed");
+            alert("Account creation failed" );
         }
     };
 

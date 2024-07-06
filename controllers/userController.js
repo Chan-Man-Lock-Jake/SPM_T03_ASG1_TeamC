@@ -43,15 +43,15 @@ const userLogin = async (req, res) => {
 };
 
 // Google Login
-const googleLogin = async (req, res) => {
-    try {
-        const loggedInUser = await User.googleLogin();
-        res.status(200).json(loggedInUser);
-    } catch (error) {
-        console.error("Error logging in with Google:", error);
-        res.status(500).send("Error logging in with Google: " + error.message);
-    }
-};
+// const googleLogin = async (req, res) => {
+//     try {
+//         const loggedInUser = await User.googleLogin();
+//         res.status(200).json(loggedInUser);
+//     } catch (error) {
+//         console.error("Error logging in with Google:", error);
+//         res.status(500).send("Error logging in with Google: " + error.message);
+//     }
+// };
 
 module.exports = {
     createUser,

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require('cors'); // For Front-end Framework Bootstrap 
 const userController = require("./controllers/userController");
+const { checkAuth } = require("./middleware/userAuth");
 
 const app = express();
 app.use(cors()); // Enable CORS for all routes

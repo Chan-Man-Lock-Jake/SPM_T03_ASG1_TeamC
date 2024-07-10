@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("http://localhost:4000/login", {
+            const response = await fetch("http://localhost:3000/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Login Successful!");
 
             // Redirect to index page after successful login
-            window.location.href = "index.html";
+            window.location.href = "home.html";
         } catch (error) {
             console.error("Error Logging in user:", error);
             alert("Login failed: " + error.message);
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Google Login Successful!");
 
             // Redirect to index page after successful login
-            window.location.href = "index.html";
+            window.location.href = "home.html";
         } catch (error) {
             console.error("Error logging in with Google:", error);
             alert("Google Login failed: " + error.message);

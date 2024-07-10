@@ -48,14 +48,6 @@
                 <a href="leaderboard.html">LEADERBOARD</a>
             </div>
 
-            <!--Login-->
-            <div class="game-button">
-                <div class="game-icons">
-                    <ion-icon name="trophy-outline"></ion-icon>
-                </div>
-                <a href="login.html">LOGIN</a>
-            </div>
-
             <!--Exit game-->
             <div class="game-button" onclick="closeWindow()">
                 <div class="game-icons">
@@ -63,11 +55,21 @@
                 </div>
                 <a>EXIT</a>
             </div>
+
+            <!--Log out-->
+            <div class="logout-button" id="logout">
+                <div class="game-icons">
+                    <ion-icon name="exit-outline"></ion-icon>
+                </div>
+                <a>LOGOUT</a>
+            </div>
         </div>
     </div>
 
     <!--Exit Browser-->
     <script src="scripts/exit.js"></script>
+    <!--User Logout-->
+    <script type="module" defer src="scripts/userLogout.js"></script>
 
     <!-- Ionicons framework -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

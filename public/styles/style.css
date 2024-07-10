@@ -35,6 +35,7 @@ body {
 }
 
 .game-button,
+.logout-button,
 .new-game-button {
     background-color: #F4A261;
     border-radius: 10px;
@@ -67,6 +68,7 @@ body {
 
 /* text styling */
 .text,
+.logout-button a,
 .game-button a,
 .login-button a,
 .welcome-text,
@@ -79,6 +81,7 @@ body {
     font-style: normal;
     color: #FFFCF2;
     font-weight: 800;
+    cursor: pointer;
 }
 
 .google-text {
@@ -87,6 +90,7 @@ body {
 }
 
 .game-button a,
+.logout-button a,
 .new-game-button a,
 .login-button a {
     font-size: 20px;
@@ -106,6 +110,7 @@ body {
 }
 
 .game-button:hover,
+.logout-button:hover,
 .new-game-button:hover,
 .login-button:hover {
     background-color: #2A9D8F;

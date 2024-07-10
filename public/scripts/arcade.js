@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleDragOver(e) {
         e.preventDefault();
+        //e.target.style.backgroundColor = 'red';
     }
 
     function handleDragDrop(e) {
@@ -84,93 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
         coinsElement.textContent = coins;
     }
 
-    // function countScore(type, neighbors, row, col) {
-    //     let neighborsTxt = neighbors.map(neighbor => neighbor.textContent);
-
-    //     // Score is increased when:
-    //     // 1. Residential per Industry 
-    //     // 2. Residential per Residential
-    //     // 3. Residential per Commerical
-    //     // 4. Residential per Park 
-    //     // Done 5. Industry per Industry (itself is one point)
-    //     // 6. Commercial per Commercial (adjacent > 1)
-    //     // 7. Park per Park (adjacent > 1)
-    //     // Done 8. Road per Road (in a row > 1)
-
-    //     switch (type) {
-    //         // For Industry:
-    //         case 'I':
-    //             score += 1;
-    //             break;
-    //         // For Park:
-    //         case 'O':
-    //             //1.All sides have O
-    //             //1.1 0 sides of sides have O (+5)
-    //             //1.2 1 sides of sides have O (+4)
-    //             //1.3 2 sides of sides have O (+3)
-    //             //1.4 3 sides of sides have O (+2)
-    //             //1.5 ALL sides of sides have O (+1)
-    //             //2.Three sides have O
-    //             //2.1 0 sides of sides have O (+4)
-    //             //2.2 1 sides of sides have O (+3)
-    //             //2.3 2 sides of sides have O (+2)
-    //             //2.4 ALL sides of sides have O (+1)
-    //             //3 Two sides have O
-    //             //3.1 0 sides of sides have O (+3)
-    //             //3.2 1 sides of sides have O (+2)
-    //             //3.3 ALL sides of sides have O (+1)
-    //             //4 One sides have O
-    //             //4.1 0 sides of sides have O (+2)
-    //             //4.2 ALL sides of sides have O (+1)
-    //             //5 No sides have O (+0)
-    //             const adjacent = [
-    //                 [row - 1, col],
-    //                 [row, col - 1],
-    //                 [row, col + 1],
-    //                 [row + 1, col]
-    //             ];
-
-    //             for (const [adjX, adjY] of adjacent) {
-
-    //             }
-
-    //             break;
-    //         // For Road:
-    //         case '*':
-    //             // Case 1.0 Both side Road
-    //             if (neighbors[1].textContent === '*' && neighbors[2].textContent === '*') {
-    //                 // 1.1 Both side of side Nothing (+3)
-    //                 if ((grid[row][col - 2] === "Left Border" || grid[row][col - 2].textContent !== '*') && grid[row][col + 2].textContent !== '*') {
-    //                     score += 3;
-    //                 // 1.2 One side of side Nothing (+2)
-    //                 } else if (grid[row][col - 2].textContent !== '*' || grid[row][col + 2].textContent !== '*') {
-    //                     score += 2;
-    //                     console.log("first");
-    //                 // 1.3 No side of side Nothing (+1)
-    //                 } else {
-    //                     score += 1;
-    //                 }
-    //             // Case 2.0 One side Road
-    //             } else if (neighbors[1] === "Left Border" || !grid[row][col - 2]) {
-    //                 score += 1;
-    //                 console.log("left");
-    //             } else if (neighbors[1].textContent === '*' || neighbors[2].textContent === '*') { //BORDER
-    //                 // 2.1 Side of side Nothing (+2)
-    //                 if ((grid[row][col - 2].textContent !== '*' && neighbors[2].textContent !== '*') || (grid[row][col + 2].textContent !== '*' && neighbors[1].textContent !== '*')) {
-    //                     score += 2
-    //                     console.log("second");
-    //                 // 2.2 Side of side Road (+1)
-    //                 } else {
-    //                     score += 1;
-    //                 }
-    //             }
-    //             break;
-    //     }
-    //     scoreElement.textContent = score;
-    // }
-
     function countScore(type, neighbors, row, col) {
         let score = 0;
+        console.log(type);
         switch (type) {
             case 'R':
                 score = countResidential(neighbors);
@@ -187,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case '*':
                 score = countRoad(neighbors);
                 break;
-        }
+        }   
         grid[row][col].dataset.score = score;
     }
 
@@ -197,9 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (neighbor[e] === 'I') {
                 score += 1;
                 break;
-            } else if (neighbor[e] === 'R' || neighbor[e] === 'C') {
+            } else if (neighbor[e].dataset.building === 'R' || neighbor[e].dataset.building === 'C') {
                 score += 1;
-            } else if (neighbor[e] === 'O') {
+            } else if (neighbor[e].dataset.building === 'O') {
                 score += 2;
             }
         }
@@ -209,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function countCommercial(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
-            if (neighbor[e] === 'C') {
+            if (neighbor[e].dataset.building === 'C') {
                 score += 1;
             }
         }
@@ -219,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function countPark(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
-            if (neighbor[e] === 'O') {
+            if (neighbor[e].dataset.building === 'O') {
                 score += 1;
             }
         }
@@ -229,48 +146,74 @@ document.addEventListener('DOMContentLoaded', () => {
     function countRoad(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
-            if (neighbor[e] === '*' && (e === 1 || e === 2)) {
+            if (neighbor[e].dataset.building === '*' && (e === 1 || e === 2)) {
                 score += 1;
+                break;
             }
         }
+        console.log(score, "ROAD")
         return score;
 
     }
 
     function totalScore() {
         let totalScore = 0;
-        for(let e = 0; e < 20; e++) {
-            for(j = 0; j < 20; j++) {
-                totalScore += grid[e][j].dataset.score;
+        for(let e = 0; e < grid.length; e++) {
+            for(let j = 0; j < grid.length; j++) {
+                console.log(grid[e][j].dataset.score);
+                !isNaN(parseInt(grid[e][j].dataset.score)) ? totalScore += parseInt(grid[e][j].dataset.score) : '' ;
             }
         }
-        return totalScore
+        console.log(totalScore);
+        return totalScore;
     }
 
+    // Place building at the given row & col
     function addBuilding(row, col, type) {
         const cell = grid[row][col];
         cell.innerHTML = `${type}`;
-        cell.dataset.building = type;
+        cell.dataset.building = type; //?????
         cell.classList.add('building');
 
+        //console.log(row, col);
+
+        // Neighbors of the building placed
         let neighbors = [
             row != 0 ? grid[row - 1][col] : "Top Border", //TOP
             col != 0 ? grid[row][col - 1] : "Left Border", //LEFT
-            col != 19 ? grid[row][col + 1] : "Right Border", //RIGHT
-            row != 19 ? grid[row + 1][col] : "Bottom Border" //BOTTOM
+            col < grid.length - 1 ? grid[row][col + 1] : "Right Border", //RIGHT
+            row < grid.length - 1 ? grid[row + 1][col] : "Bottom Border" //BOTTOM
         ];
-        console.log(neighbors);
+
+        //console.log(neighbors);
 
         countScore(type, neighbors, row, col);
-        for (let i = 0; i < 4; i++) {
+
+        for (let i = 0; i < 4; i++) {            
+            // const neighborRow = row != 0 && row < grid.length - 1 ? parseInt(neighbors[i].dataset.row) : "Border"; //? parseInt(neighbors[i].dataset.row) : '';
+            // const neighborCol = col != 0 && col < grid.length - 1 ? parseInt(neighbors[i].dataset.col) : "Border"; //? parseInt(neighbors[i].dataset.col) : '';
+
+            if (typeof neighbors[i] === 'string') {
+                continue;
+            }
+
+            const neighborRow = parseInt(neighbors[i].dataset.row);
+            const neighborCol = parseInt(neighbors[i].dataset.col);
+
+            // grid[neighborRow][neighborCol].style.backgroundColor = 'Red';
+            // grid[neighborRow - 1][neighborCol].style.backgroundColor = 'Green';
+            // grid[neighborRow][neighborCol - 1].style.backgroundColor = 'Yellow';
+            // grid[neighborRow][neighborCol + 1].style.backgroundColor = 'Blue';
+            // grid[neighborRow + 1][neighborCol].style.backgroundColor = 'White';
+
             let neighbors2 = [
-                row != 0 ? grid[neighbors[i].dataset.row - 1][neighbors[i].dataset.col] : "Top Border", //TOP
-                col != 0 ? grid[neighbors[i].dataset.row][neighbors[i].dataset.col - 1] : "Left Border", //LEFT
-                col != 19 ? grid[neighbors[i].dataset.row][neighbors[i].dataset.col + 1] : "Right Border", //RIGHT
-                row != 19 ? grid[neighbors[i].dataset.row + 1][neighbors[i].dataset.col] : "Bottom Border" //BOTTOM
+                neighborRow - 1 > 0 ? grid[neighborRow - 1][neighborCol] : "Top Border", //TOP
+                neighborCol != 0 ? grid[neighborRow][neighborCol - 1] : "Left Border", //LEFT
+                neighborCol < grid.length - 1 ? grid[neighborRow][neighborCol + 1] : "Right Border", //RIGHT
+                neighborRow < grid.length - 1 ? grid[neighborRow + 1][neighborCol] : "Bottom Border" //BOTTOM
             ];
-            console.log(neighbors2);
-            countScore(neighbors[e], neighbors2, row, col)
+
+            countScore(neighbors[i].dataset.building, neighbors2, neighborRow, neighborCol)
         }
 
         scoreElement.textContent = totalScore();
@@ -356,4 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
+    // for(let e = 0; e < grid.length; e++) {
+    //     for(j = 0; j < grid.length; j++) {
+    //         console.log(e, j);
+    //     }
+    // }
 });

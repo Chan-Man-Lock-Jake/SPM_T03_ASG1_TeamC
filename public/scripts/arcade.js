@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         if (coins <= 0) {
             alert("Game Over! Please start a new game.");
+            endGame();
             return;
         }
         const building = e.dataTransfer.getData('text/plain');
@@ -111,7 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function countResidential(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
-            if (neighbor[e] === 'I') {
+            if (typeof neighbor[e] === 'string') {
+                continue;
+            }
+            if (neighbor[e].dataset.building === 'I') {
                 score += 1;
                 break;
             } else if (neighbor[e].dataset.building === 'R' || neighbor[e].dataset.building === 'C') {
@@ -126,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function countCommercial(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
+            if (typeof neighbor[e] === 'string') {
+                continue;
+            }
             if (neighbor[e].dataset.building === 'C') {
                 score += 1;
             }
@@ -136,6 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function countPark(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
+            if (typeof neighbor[e] === 'string') {
+                continue;
+            }
             if (neighbor[e].dataset.building === 'O') {
                 score += 1;
             }
@@ -146,6 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function countRoad(neighbor) {
         let score = 0;
         for (let e = 0; e < 4; e++) {
+            if (typeof neighbor[e] === 'string') {
+                continue;
+            }
             if (neighbor[e].dataset.building === '*' && (e === 1 || e === 2)) {
                 score += 1;
                 break;
@@ -172,10 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function addBuilding(row, col, type) {
         const cell = grid[row][col];
         cell.innerHTML = `${type}`;
-        cell.dataset.building = type; //?????
+        cell.dataset.building = type;
         cell.classList.add('building');
-
-        //console.log(row, col);
 
         // Neighbors of the building placed
         let neighbors = [
@@ -185,14 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
             row < grid.length - 1 ? grid[row + 1][col] : "Bottom Border" //BOTTOM
         ];
 
-        //console.log(neighbors);
-
         countScore(type, neighbors, row, col);
 
         for (let i = 0; i < 4; i++) {            
-            // const neighborRow = row != 0 && row < grid.length - 1 ? parseInt(neighbors[i].dataset.row) : "Border"; //? parseInt(neighbors[i].dataset.row) : '';
-            // const neighborCol = col != 0 && col < grid.length - 1 ? parseInt(neighbors[i].dataset.col) : "Border"; //? parseInt(neighbors[i].dataset.col) : '';
-
             if (typeof neighbors[i] === 'string') {
                 continue;
             }
@@ -217,14 +223,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         scoreElement.textContent = totalScore();
-        countCoin(type, neighbors);
         coins -= 1;
+        countCoin(type, neighbors);
     }
 
     function checkBuilding(row, col) {
         if (firstBuilding) {
             firstBuilding = false;
-            coins -= 1;
             return true
         };
         if (grid[row] && grid[row][col] && grid[row][col].textContent !== '') {
@@ -299,9 +304,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
-    // for(let e = 0; e < grid.length; e++) {
-    //     for(j = 0; j < grid.length; j++) {
-    //         console.log(e, j);
-    //     }
-    // }
 });

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreElement = document.getElementById('score');
     const turnElement = document.getElementById('turn');
     const buildingOptionsContainer = document.getElementById('building-options');
+    const demolishButton = document.getElementById('demolishButton');
 
     // Starting stats
     let profit = 0;
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let turn = 0;
 
     let firstBuilding = true;
+    let selectedCell = null;
 
     // R = Residential
     // I = Industry
@@ -53,6 +55,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function handleCellClick(e) {
+        const row = parseInt(e.target.dataset.row);
+        const col = parseInt(e.target.dataset.col);
+
+        document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('glow'));
+
+        if (grid[row][col].dataset.building) {
+            selectedCell = { row, col };
+            demolishButton.disabled = false;
+
+            e.target.classList.add('glow');
+
+        } else {
+            selectedCell = null;
+            demolishButton.disabled = true;
+        }
+    }
+
     function createBoard(rows, cols) {
         gameBoard.innerHTML = '';
         gameBoard.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
@@ -67,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.dataset.col = col;
                 cell.addEventListener('dragover', handleDragOver);
                 cell.addEventListener('drop', handleDragDrop);
+                cell.addEventListener('click', handleCellClick);
                 gameBoard.appendChild(cell);
                 rowArr.push(cell);
             }
@@ -75,18 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return grid;
     }
 
-    function countIncome(type, neighbors) {
+    function countIncome() {
         income = 0; // Reset income each turn
-        neighbors.forEach(neighbor => {
-
-            // Coins can only be generated when:
-            // 1. Industry per Residential
-            // 2. Commercial per Residential
-
-            if ((type === 'R' && (neighbor.textContent === 'I' || neighbor.textContent === 'C')) || (neighbor.textContent === 'R' && (type === 'I' || type === 'C'))) {
-                income += 1;
-            }
-        });
 
         grid.forEach (row => {
             row.forEach(cell => {
@@ -255,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cell = grid[row][col];
         cell.innerHTML = `${type}`;
         cell.dataset.building = type;
+        cell.dataset.score = score;
         cell.classList.add('building');
 
         // Neighbors of the building placed
@@ -298,6 +310,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Remove building at the given row and col
+    function demolishBuilding() {     
+        if (turn === 0) { // Check if it's the first turn
+            alert("You cannot demolish buildings during the first turn.");
+            return;
+        }   
+        if (selectedCell) {
+            const { row, col } = selectedCell;
+            const cell = grid[row][col];
+            if (cell.dataset.building) {
+                income += 1;
+                incomeElement.textContent = income;
+
+                cell.innerHTML = '';
+                delete cell.dataset.building ;
+                cell.dataset.score = '';
+                cell.classList.remove('building');
+
+                countUpkeep();
+                scoreElement.textContent = totalScore();
+                saveGameState();
+
+                selectedCell = null;
+            }
+        } else {
+            alert("No building to demolish at this location!");
+        }
+    }
     function isOnBorder(row, col) {
         const size = grid.length;
         return row === 0 || col === 0 || row === size - 1 || col === size - 1;
@@ -410,6 +450,8 @@ document.addEventListener('DOMContentLoaded', () => {
         generateBuilding();
         saveGameState();
     }
+
+    demolishButton.addEventListener('click', demolishBuilding);
 
     startGame();
 });

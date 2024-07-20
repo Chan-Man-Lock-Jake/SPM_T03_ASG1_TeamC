@@ -49,6 +49,39 @@
             display: flex;
             justify-content: center ;
         }
+        
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: "Raleway", sans-serif;
+        }
+
+        .demolish-button {
+            padding: 10px 20px;
+            background-color: grey;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: not-allowed;
+            transition: background-color 0.3s, cursor 0.3s;
+        }
+
+        .demolish-button:enabled {
+            background-color: rgb(255, 117, 79);
+            cursor: pointer;
+        }
+
+        .demolish-button:enabled:hover {
+            background-color: rgba(255, 117, 79, 0.8);
+        }
+        .cell.glow {
+            box-shadow: 0 0 10px rgb(214, 214, 214);
+            border: 2px solid rgb(255, 255, 255); 
+        }
     </style>
 
     <div class="arcade-container">
@@ -62,6 +95,10 @@
         </div>
         <div id="game-board" class="game-board"></div>
         <div id="building-options" class="building-options"></div>
+        <div class="button-container">
+            <button id="demolishButton" class="demolish-button" disabled>Demolish Building</button>
+        </div>
+    </div>
     </div>
     <script src="scripts/freeplay.js"></script>
 </body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <style>
+        .arcade-container {
+            /* background-color: pink; */
+        }
+
+        .stats-bar {
+            /* background-color: green; */
+            display: flex;
+            font-family: "Raleway", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            color: #FFFCF2;
+            font-weight: 800;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 30px;
+            width: 500px;
+        }
+
+        .game-board {
+            /* background-color: red; */
+            margin-left: auto;
+            margin-right: auto;
+            height: fit-content;
+            width: fit-content;
+        }
+
+        .building-options {
+            /* background-color: yellow; */
+            margin-left: auto;
+            margin-right: auto;
+            /* width: 300px; */
+        }
+
+        .building-option {
+            height: 50px;
+            width: 50px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center ;
+        }
+    </style>
+
+    <div class="arcade-container">
+        <div class="stats-bar">
+            <div>UPKEEP<br><div class="stats" id="upkeep"></div></div>
+            <div>INCOME<br><div class="stats" id="income"></div></div>
+            <div>PROFIT<br><div class="stats" id="profit"></div></div>
+            <div>COUNTER<br><div class="stats" id="counter"></div></div> <!--keep track of consecutive losses-->
+            <div>SCORE<br><div class="stats" id="score"></div></div>
+            <div>TURN<br><div class="stats" id="turn"></div></div>
+        </div>
+        <div id="game-board" class="game-board"></div>
+        <div id="building-options" class="building-options"></div>
+    </div>
+    <script src="scripts/freeplay.js"></script>
+</body>
+</html>

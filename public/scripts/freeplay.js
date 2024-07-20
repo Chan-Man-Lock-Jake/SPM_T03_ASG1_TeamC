@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createBoard(rows, cols) {
+        gameBoard.innerHTML = '';
         gameBoard.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
         gameBoard.style.gridTemplateRows = `repeat(${rows}, 40px)`;
         const grid = [];
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profit = income - upkeep;
         profitElement.textContent = profit;
         upkeepElement.textContent = upkeep;
-        console.log(`Upkeep: ${upkeep}, Income: ${income}, Profit: ${profit}, Counter: ${counter}`);
+        console.log(`Upkeep: ${upkeep}, Income: ${income}, Profit: ${profit}, Counter: ${counter}, Score: ${totalScore()}`);
 
         if (profit < 0) {
             counter += 1;
@@ -155,8 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function countScore(type, neighbors, row, col) {
-        let score = 0;
-        console.log(type);
+        //let score = 0;
         switch (type) {
             case 'R':
                 score = countResidential(neighbors);
@@ -239,13 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function totalScore() {
         let totalScore = 0;
-        for(let e = 0; e < grid.length; e++) {
-            for(let j = 0; j < grid.length; j++) {
-                console.log(grid[e][j].dataset.score);
-                !isNaN(parseInt(grid[e][j].dataset.score)) ? totalScore += parseInt(grid[e][j].dataset.score) : '' ;
-            }
-        }
-        console.log(totalScore);
+        grid.forEach(row => {
+            row.forEach(cell => {
+                const score = parseInt(cell.dataset.score, 10);
+                if (!isNaN(score)) {
+                    totalScore += score;
+                }
+            });
+        });
         return totalScore;
     }
 
@@ -263,8 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
             col < grid.length - 1 ? grid[row][col + 1] : "Right Border", //RIGHT
             row < grid.length - 1 ? grid[row + 1][col] : "Bottom Border" //BOTTOM
         ];
-
-        countScore(type, neighbors, row, col);
 
         for (let i = 0; i < 4; i++) {            
             if (typeof neighbors[i] === 'string') {
@@ -287,17 +286,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 neighborRow < grid.length - 1 ? grid[neighborRow + 1][neighborCol] : "Bottom Border" //BOTTOM
             ];
 
-            countScore(neighbors[i].dataset.building, neighbors2, neighborRow, neighborCol)
         }
 
-        scoreElement.textContent = totalScore();
+        countScore(type, neighbors, row, col);
         countIncome(type, neighbors);
         countUpkeep();
+        scoreElement.textContent = totalScore();
+
+        if(isOnBorder(row, col)) {
+            expandGrid();
+        }
     }
 
-    function addGrids() {
-
+    function isOnBorder(row, col) {
+        const size = grid.length;
+        return row === 0 || col === 0 || row === size - 1 || col === size - 1;
     }
+    
+    function expandGrid() {
+        const currentSize = grid.length;
+        const newSize = currentSize + 10;
+        const newGrid = createBoard(newSize, newSize);
+
+        // Copy existing buildings and scores to the center of new grid
+        for (let row = 0; row < currentSize; row++) {
+            for (let col = 0; col < currentSize; col++) {
+                const oldCell = grid[row][col];
+                const newCell = newGrid[row + 5][col + 5];
+
+                newCell.innerHTML = oldCell.innerHTML;
+                newCell.dataset.building = oldCell.dataset.building;
+                newCell.dataset.score = oldCell.dataset.score;
+                newCell.classList = oldCell.classList;
+            }
+        }
+
+        // Update the grid reference
+        grid = newGrid;
+    }
+
+
     function checkBuilding(row, col) {
         if (firstBuilding) {
             firstBuilding = false;

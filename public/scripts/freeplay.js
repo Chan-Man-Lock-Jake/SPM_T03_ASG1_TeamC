@@ -105,21 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         incomeElement.textContent = income;
-        updateProfit();
     }
 
     function updateProfit() {
         profit = income - upkeep;
         profitElement.textContent = profit;
         upkeepElement.textContent = upkeep;
-        counterElement.textContent = counter;
+        console.log(`Upkeep: ${upkeep}, Income: ${income}, Profit: ${profit}, Counter: ${counter}`);
 
-        console.log(`Profit: ${profit}, Upkeep: ${upkeep}, Counter: ${counter}`);
-
-        updateCounter();
-    }
-
-    function updateCounter() {
         if (profit < 0) {
             counter += 1;
             if( counter === 20) {
@@ -127,10 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 endGame();
             }
         } else {
-            counter = 0; // Reset counter when there is profit
+            // Reset counter when there is profit
+            counter = 0; 
         }
-        counterElement.textContent = counter; // Update the display for the counter
-
+        counterElement.textContent = counter; 
     }
 
     function countUpkeep() {
@@ -302,6 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
         countUpkeep();
     }
 
+    function addGrids() {
+
+    }
     function checkBuilding(row, col) {
         if (firstBuilding) {
             firstBuilding = false;

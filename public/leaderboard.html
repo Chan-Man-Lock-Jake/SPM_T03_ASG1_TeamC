@@ -10,6 +10,8 @@
     <script type="module" src="./scripts/leaderboard.js"></script>
 </head>
 <body>
+    <button class="back-button" onclick="window.location.href='home.html'">Back to Home</button>
+
     <main>
         <div id="arcade-header" class="header">
             <h1>Arcade Ranking</h1>
@@ -19,18 +21,19 @@
         </div>
         <div id="arcade-leaderboard" class="leaderboard">
             <div class="ribbon"></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody id="arcadeLeaderboard-body">
-                </tbody>
-            </table>
-            <div id="highest-score"></div> <!-- Display highest score here -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="arcadeLeaderboard-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -42,18 +45,23 @@
             </button>
         </div>
         <div id="freeplay-leaderboard" class="leaderboard">
-            <div class="ribbon"></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody id="fpLeaderboard-body">
-                </tbody>
-            </table>
+            <div class="ribbon">
+                <div id="highest-score"></div> <!-- Highest score in the ribbon -->
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fpLeaderboard-body">
+                        <!-- Highest score will be manually inserted as rank 1 -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </body>

@@ -1,5 +1,5 @@
 body {
-    background-color: #264653;
+    background-color: hsl(225, 61%, 83%);
 }
 
 /* styling for containers */
@@ -23,7 +23,7 @@ body {
     font-weight: 400;
     font-style: normal;
     font-size: 100px;
-    color: #E9C46A;
+    color: #1f267b;
     padding-top: 0;
     margin-top: 0;
     margin-bottom: 5%;
@@ -113,7 +113,7 @@ body {
 .logout-button:hover,
 .new-game-button:hover,
 .login-button:hover {
-    background-color: #2A9D8F;
+    background-color: #1f267b;
 }
 
 .game-icons {
@@ -128,7 +128,7 @@ body {
     max-width: 100%;
     margin: 20px auto;
     padding: 20px;
-    background-color: #264653;
+    background-color: hsl(225, 61%, 83%);
     border-radius: 5px;
 }
 
@@ -203,7 +203,6 @@ body {
     width: 100%;
     height: 40px;
     background-color: #E9C46A;
-    border: 1px solid #000;
     text-decoration: none;
     border-radius: 10px;
 }
@@ -213,7 +212,6 @@ body {
     width: 40%;
     height: 60px;
     background-color: #E9C46A;
-    border: 1px solid #000;
     color: black;
     border-radius: 10px;
     cursor: pointer;

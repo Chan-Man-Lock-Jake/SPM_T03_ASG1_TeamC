@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="./styles/leaderboard.css" rel="stylesheet"/>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script type="module" src="./scripts/end-game.js"></script>
+    <script type="module" src="./scripts/freeplay.js"></script>
+
     <title>Game Result</title>
     <style>
         body {
@@ -11,96 +21,27 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             margin: 20px auto;
             padding: 20px;
             background-color: #264653;
             border-radius: 5px;
         }
-
-        .stats {
-            margin-bottom: 20px;
-        }
-
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(20, 40px);
-            grid-template-rows: repeat(20, 40px);
-            gap: 0;
-            margin: 0 auto; /* Center the game board horizontally */
-            justify-content: center;
-        }
-
-        .cell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #F4A261;
-            border: 1px solid black;
-            height: 40px;
-            width: 40px;
-        }
-
-        .building-options {
-            display: flex;
-            gap: 30px;
-            margin-top: 40px;
-            justify-content: center;
-        }
-
-        .building-option {
-            padding: 10px;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            background-color: #fff;
-        }
-
-        .building-option.dragging {
-            opacity: 0.5;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Game Result</h1>
+        <h1>Game Over</h1>
+        <p id="score-space"></p>
         <div class="stats">
             <!-- Optionally display stats here if needed -->
         </div>
-        <div id="game-board" class="game-board"></div>
+        <div id="namePrompt">
+            <p>Congratulations! You made it to the leaderboard. Please enter your name:</p>
+            <input type="text" id="playerName" placeholder="Enter your name">
+            <button onclick="window.location.href= 'leaderboard.html' " id="submitName">Submit</button>
+        </div>
+        <button onclick="window.location.href='home.html'">Continue</button>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const gameBoard = document.getElementById('game-board');
-            const gameState = JSON.parse(localStorage.getItem('gameState'));
-
-            if (gameState && gameState.board) {
-                gameState.board.forEach((row, rowIndex) => {
-                    row.forEach((cellContent, colIndex) => {
-                        const cell = document.createElement('div');
-                        cell.classList.add('cell');
-                        if (cellContent.trim() !== '') {
-                            cell.classList.add('building');
-                            cell.innerHTML = cellContent;
-                        }
-                        gameBoard.appendChild(cell);
-                    });
-                });
-            }
-        });
-    </script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
@@ -82,7 +84,28 @@
             box-shadow: 0 0 10px rgb(214, 214, 214);
             border: 2px solid rgb(255, 255, 255); 
         }
+
+        .save-game-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: rgb(138, 138, 235);
+            color: rgb(233, 233, 238);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .save-game-button:hover {
+            background-color: rgb(233, 233, 238);
+            color: rgb(138, 138, 235);
+        }
     </style>
+
+    <!-- Save Game Button in Top Right Corner -->
+    <button id="saveGameButton" class="save-game-button">Save Game</button>
 
     <div class="arcade-container">
         <div class="stats-bar">
@@ -99,7 +122,6 @@
             <button id="demolishButton" class="demolish-button" disabled>Demolish Building</button>
         </div>
     </div>
-    </div>
-    <script src="scripts/freeplay.js"></script>
+    <script type="module" src="./scripts/freeplay.js"></script>
 </body>
 </html>

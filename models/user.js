@@ -1,9 +1,8 @@
-// Import Firebase functions 
-const { getFirestore, addDoc, collection } = require('firebase/firestore');
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } = require('firebase/auth');
-const { initializeApp } = require('firebase/app');
+import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
-// Firebase configuration 
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCvsupITjCXYnyJ5taUTfgKaTr4ICuZmI4",
     authDomain: "auth-e1f14.firebaseapp.com",
@@ -16,12 +15,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore database
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-class User {
+export class User {
     constructor(id, username, email, password) {
         this.id = id;
         this.username = username;
@@ -32,28 +29,20 @@ class User {
     // Create Account
     static async createUser(newUser) {
         try {
-            // Create user in Firebase Authentication
             const userCredential = await createUserWithEmailAndPassword(auth, newUser.email, newUser.password);
             const user = userCredential.user;
 
-            // Send email verification
-            // await sendEmailVerification(user);
-
-            // Add user data to Firestore database in "Users" collection
             await addDoc(collection(db, "Users"), {
                 username: newUser.username,
                 email: newUser.email,
                 userId: user.uid 
             });
 
-            // Store created user data
-            const createdUser = {
+            return {
                 id: user.uid,
                 username: newUser.username,
                 email: newUser.email,
             };
-
-            return createdUser;
         } catch (error) {
             throw new Error(error.message);
         }
@@ -62,21 +51,15 @@ class User {
     // Email-Password Login
     static async userLogin(email, password) {
         try {
-            // Sign in user with email and password
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Return logged in user data
-            const loggedInUser = {
+            return {
                 id: user.uid,
                 email: user.email,
             };
-
-            return loggedInUser;
         } catch (error) {
             throw new Error(error.message);
         }
     }
 }
-
-module.exports = User;

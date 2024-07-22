@@ -5,16 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
     <style>
         .arcade-container {
-            /* background-color: pink; */
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 5px;
         }
 
         .stats-bar {
-            /* background-color: green; */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px; 
+            color: #fff;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(20, 40px);
+            grid-template-rows: repeat(20, 40px);
+            gap: 0px;
+            margin: 0 auto; /* Center the game board horizontally */
+            justify-content: center;
+        }
+
+        .cell {
+            display: block;
+            align-items: center;
+            justify-content: center;
+            background-color: #F4A261;
+            border: 1px solid black;
+            height: 40px;
+            width: 40px;
+        }
+
+        .building-options {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .building-option {
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .building-option.dragging {
+            opacity: 0.5;
+        }
+
+        body{
+            background-color: hsl(225, 61%, 83%);
+
+        }
+        .stats-bar {
             display: flex;
             font-family: "Raleway", sans-serif;
             font-optical-sizing: auto;
@@ -28,7 +78,6 @@
         }
 
         .game-board {
-            /* background-color: red; */
             margin-left: auto;
             margin-right: auto;
             height: fit-content;

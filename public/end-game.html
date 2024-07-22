@@ -16,32 +16,67 @@
     <title>Game Result</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #264653;
+            font-family: 'Rubik', sans-serif;
+            background-color: hsl(225, 61%, 83%);
             margin: 0;
             padding: 0;
+            color: #ffffff;
         }
         .container {
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #264653;
-            border-radius: 5px;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #F4A261;
+            border-radius: 10px;
+            text-align: center;
         }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        #namePrompt {
+            display: inline-block;
+            margin: 20px 0;
+        }
+        #playerName {
+            font-size: 1.2rem;
+            padding: 10px;
+            border: 2px solid #F4A261;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #submitName {
+            font-size: 1.3rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: hsl(0, 0%, 100%);
+            color: #F4A261;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submitName:hover {
+            background-color: hsl(232, 31%, 38%);
+            color: #ffffff;
+        }
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Game Over</h1>
+        <h1>Game Over!</h1>
         <p id="score-space"></p>
-        <div class="stats">
-            <!-- Optionally display stats here if needed -->
-        </div>
         <div id="namePrompt">
-            <p>Congratulations! You made it to the leaderboard. Please enter your name:</p>
+            <p>Congratulations! You made it to the leaderboard. Please enter a name:</p>
             <input type="text" id="playerName" placeholder="Enter your name">
-            <button onclick="window.location.href= 'leaderboard.html' " id="submitName">Submit</button>
+            <button type="button" id="submitName">Submit</button>
         </div>
-        <button onclick="window.location.href='home.html'">Continue</button>
     </div>
 </body>
 </html>

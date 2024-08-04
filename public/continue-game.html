@@ -1,4 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continue Game</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <script type="module" src="./scripts/freeplay.js"></script>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Load Saved Game</h1>
+    <ul id="savedGamesList"></ul>
+
+    <script type="module">
+        import { loadGameState } from './scripts/freeplay.js';
+
+        const querySnapshot = await getDocs(collection(db, "gameStates"));
+            savedGamesList.innerHTML = "";
+
+            querySnapshot.forEach(doc => {
+                if (doc.id.startsWith(user.uid)) {
+                    const fileName = doc.id.substring(user.uid.length + 1);
+                    const listItem = document.createElement('li');
+                    listItem.textContent = fileName;
+                    listItem.addEventListener('click', () => {
+                        loadGameState(fileName);
+                    });
+                    savedGamesList.appendChild(listItem);
+                }
+            });
+
+        loadSavedGames();
+    </script>
+</body>
 </html>

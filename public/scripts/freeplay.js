@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, collection, setDoc, query, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, addDoc, collection, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCvsupITjCXYnyJ5taUTfgKaTr4ICuZmI4",
@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 
 const profitElement = document.getElementById('profit');
 const upkeepElement = document.getElementById('upkeep');
@@ -66,7 +65,6 @@ function handleDragDrop(e) {
         generateBuilding();
         turn++
         turnElement.textContent = turn;
-        saveGameState();
     } else {
         alert("Invalid placement! Buildings must be placed orthogonally to existing buildings.");
     }
@@ -445,19 +443,6 @@ function endGame() {
     
 }
 
-function saveGameState() {
-    const gameState = {
-        board: grid.map(row => row.map(cell => cell.innerHTML)),
-        profit: profit,
-        upkeep: upkeep,
-        income: income,
-        counter: counter,
-        score: score,
-        turn: turn
-    };
-    localStorage.setItem('gameState', JSON.stringify(gameState));
-}
-
 function startGame() {
     profit = 0;
     upkeep = 0;
@@ -473,8 +458,66 @@ function startGame() {
     scoreElement.textContent = score;
     turnElement.textContent = turn;
     generateBuilding();
-    saveGameState();
 }
 
 
 startGame();
+
+function getUserFromLocalStorage() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user;
+}
+
+function saveUserToLocalStorage(user) {
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
+document.getElementById('saveGameButton').addEventListener('click', async () => {
+    const fileName = (prompt("Enter a name for the saved game:") || "").trim();
+
+    if (!fileName) {
+        alert("A file name is required to save the game.");
+        return;
+    }
+
+    const user = getUserFromLocalStorage();
+
+    if (!user) {
+        alert("No user authenticated or UID is missing. Please log in.");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    try {
+        const gameState = {
+            board: JSON.stringify(boardArray), 
+            profit: profit,
+            upkeep: upkeep,
+            income: income,
+            counter: counter,
+            score: score,
+            turn: turn
+        };
+
+        console.log("Saving game state:", gameState);
+
+        const savedGameRef = collection(db, "Users", user.uid, "savedGames");
+        await addDoc(savedGameRef, {
+            name: fileName,
+            gameState: gameState
+        });
+
+        alert("Game saved successfully!");
+    } catch (error) {
+        console.error("Error saving game state:", error.message);
+        alert("Failed to save game state. Check the console for details.");
+    }
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        saveUserToLocalStorage({ uid: user.uid, email: user.email });
+    } else {
+        localStorage.removeItem('user');
+    }
+});

@@ -521,3 +521,13 @@ onAuthStateChanged(auth, (user) => {
         localStorage.removeItem('user');
     }
 });
+
+document.getElementById('exitGameButton').addEventListener('click', async () => { 
+    const userConfirmed = window.confirm("Are you sure? Game progress will not be saved.");
+
+    if (userConfirmed) {
+        window.location.href = 'home.html';
+    } else {
+        console.log("User canceled the exit.");
+    }
+});

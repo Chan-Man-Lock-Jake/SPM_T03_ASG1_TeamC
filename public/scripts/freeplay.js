@@ -147,7 +147,7 @@ function updateProfit() {
 
     if (profit < 0) {
         counter += 1;
-        if( counter === 5) {
+        if( counter === 20) {
             alert("Game Over! You've had 20 consecutive losses.");
             endGame();
         }
@@ -306,12 +306,6 @@ function addBuilding(row, col, type) {
         const neighborRow = parseInt(neighbors[i].dataset.row);
         const neighborCol = parseInt(neighbors[i].dataset.col);
 
-        // grid[neighborRow][neighborCol].style.backgroundColor = 'Red';
-        // grid[neighborRow - 1][neighborCol].style.backgroundColor = 'Green';
-        // grid[neighborRow][neighborCol - 1].style.backgroundColor = 'Yellow';
-        // grid[neighborRow][neighborCol + 1].style.backgroundColor = 'Blue';
-        // grid[neighborRow + 1][neighborCol].style.backgroundColor = 'White';
-
         let neighbors2 = [
             neighborRow - 1 > 0 ? grid[neighborRow - 1][neighborCol] : "Top Border", //TOP
             neighborCol != 0 ? grid[neighborRow][neighborCol - 1] : "Left Border", //LEFT
@@ -339,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Demolish Button not found');
     }
 });
+
 // Remove building at the given row and col
 function demolishBuilding() {     
     if (turn === 0) { // Check if it's the first turn

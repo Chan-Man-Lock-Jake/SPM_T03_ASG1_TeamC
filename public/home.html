@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Barriecito&family=Candal&family=Happy+Monkey&family=Monofett&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Questrial&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ruda:wght@400..900&family=Yeseva+One&display=swap" rel="stylesheet">
     <!-- Lottie animation -->
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <script src="./scripts/freeplay.js" type="module"></script>
+
     <style>
         .welcomeUser {
             font-size: 34px;
@@ -43,7 +45,7 @@
                 <div class="game-icons">
                     <ion-icon name="refresh-outline"></ion-icon>
                 </div>
-                <a href="continue-game.html">CONTINUE GAME</a>
+                <a href="#" id="continueGameLink">CONTINUE GAME</a>
             </div>
 
              <!--View high score/view leaderboard-->
@@ -81,5 +83,65 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvsupITjCXYnyJ5taUTfgKaTr4ICuZmI4",
+            authDomain: "auth-e1f14.firebaseapp.com",
+            databaseURL: "https://auth-e1f14-default-rtdb.firebaseio.com",
+            projectId: "auth-e1f14",
+            storageBucket: "auth-e1f14.appspot.com",
+            messagingSenderId: "744589697016",
+            appId: "1:744589697016:web:47a44ec6954e8bfd2bc800d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        document.getElementById('continueGameLink').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const fileName = (prompt("Enter the name of the saved game:") || "").trim();
+
+            if (!fileName) {
+                alert("A name is required.");
+                window.location.href = 'home.html';
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (!user || !user.uid) {
+                alert("No user authenticated or UID is missing. Please log in.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const savedGamesRef = collection(db, "Users", user.uid, "savedGames");
+                const q = query(savedGamesRef, where("name", "==", fileName));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    alert("No saved game found with that name.");
+                    return;
+                }
+
+                const savedGameDoc = querySnapshot.docs[0];
+                const savedGameData = savedGameDoc.data();
+
+                localStorage.setItem('loadedGameState', JSON.stringify(savedGameData));
+
+                window.location.href = 'free-play.html';
+            } catch (error) {
+                console.error("Error loading game state:", error);
+                alert("Failed to load game state. Check the console for details.");
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, collection, setDoc, query, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, addDoc, collection, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCvsupITjCXYnyJ5taUTfgKaTr4ICuZmI4",
@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 
 const profitElement = document.getElementById('profit');
 const upkeepElement = document.getElementById('upkeep');
@@ -66,7 +65,6 @@ function handleDragDrop(e) {
         generateBuilding();
         turn++
         turnElement.textContent = turn;
-        saveGameState();
     } else {
         alert("Invalid placement! Buildings must be placed orthogonally to existing buildings.");
     }
@@ -147,7 +145,7 @@ function updateProfit() {
 
     if (profit < 0) {
         counter += 1;
-        if( counter === 5) {
+        if( counter === 20) {
             alert("Game Over! You've had 20 consecutive losses.");
             endGame();
         }
@@ -205,7 +203,15 @@ function countScore(type, neighbors, row, col) {
             score = countRoad(neighbors);
             break;
     }   
+   
+    console.log(`Building at (${row}, ${col}) has score: ${score}`);
     grid[row][col].dataset.score = score;
+    updateTotalScore();
+}
+
+function updateTotalScore() {
+    score = totalScore(); // Update the global score variable
+    document.getElementById('score').textContent = score; // Update UI
 }
 
 function countResidential(neighbor) {
@@ -287,8 +293,7 @@ function addBuilding(row, col, type) {
     const cell = grid[row][col];
     cell.innerHTML = `${type}`;
     cell.dataset.building = type;
-    cell.dataset.score = score;
-    cell.classList.add('building');
+    cell.classList.add('building', type);
 
     // Neighbors of the building placed
     let neighbors = [
@@ -306,12 +311,6 @@ function addBuilding(row, col, type) {
         const neighborRow = parseInt(neighbors[i].dataset.row);
         const neighborCol = parseInt(neighbors[i].dataset.col);
 
-        // grid[neighborRow][neighborCol].style.backgroundColor = 'Red';
-        // grid[neighborRow - 1][neighborCol].style.backgroundColor = 'Green';
-        // grid[neighborRow][neighborCol - 1].style.backgroundColor = 'Yellow';
-        // grid[neighborRow][neighborCol + 1].style.backgroundColor = 'Blue';
-        // grid[neighborRow + 1][neighborCol].style.backgroundColor = 'White';
-
         let neighbors2 = [
             neighborRow - 1 > 0 ? grid[neighborRow - 1][neighborCol] : "Top Border", //TOP
             neighborCol != 0 ? grid[neighborRow][neighborCol - 1] : "Left Border", //LEFT
@@ -324,7 +323,8 @@ function addBuilding(row, col, type) {
     countScore(type, neighbors, row, col);
     countIncome(type, neighbors);
     countUpkeep();
-    scoreElement.textContent = totalScore();
+
+    updateTotalScore(); 
 
     if(isOnBorder(row, col)) {
         expandGrid();
@@ -339,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Demolish Button not found');
     }
 });
+
 // Remove building at the given row and col
 function demolishBuilding() {     
     if (turn === 0) { // Check if it's the first turn
@@ -450,19 +451,6 @@ function endGame() {
     
 }
 
-function saveGameState() {
-    const gameState = {
-        board: grid.map(row => row.map(cell => cell.innerHTML)),
-        profit: profit,
-        upkeep: upkeep,
-        income: income,
-        counter: counter,
-        score: score,
-        turn: turn
-    };
-    localStorage.setItem('gameState', JSON.stringify(gameState));
-}
-
 function startGame() {
     profit = 0;
     upkeep = 0;
@@ -478,8 +466,131 @@ function startGame() {
     scoreElement.textContent = score;
     turnElement.textContent = turn;
     generateBuilding();
-    saveGameState();
 }
 
 
 startGame();
+
+function getUserFromLocalStorage() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user;
+}
+
+function saveUserToLocalStorage(user) {
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
+// Save game
+document.getElementById('saveGameButton').addEventListener('click', async () => {
+    const fileName = (prompt("Enter a name for the saved game:") || "").trim();
+
+    if (!fileName) {
+        alert("A file name is required to save the game.");
+        return;
+    }
+
+    const user = getUserFromLocalStorage();
+
+    if (!user) {
+        alert("No user authenticated or UID is missing. Please log in.");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    try {
+        const gameState = {
+            board: JSON.stringify(boardArray), 
+            profit: profit,
+            upkeep: upkeep,
+            income: income,
+            counter: counter,
+            score: score,
+            turn: turn
+        };
+
+        console.log("Saving game state:", gameState);
+
+        const savedGameRef = collection(db, "Users", user.uid, "savedGames");
+        await addDoc(savedGameRef, {
+            name: fileName,
+            gameState: gameState
+        });
+
+        alert("Game saved successfully!");
+    } catch (error) {
+        console.error("Error saving game state:", error.message);
+        alert("Failed to save game state. Check the console for details.");
+    }
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        saveUserToLocalStorage({ uid: user.uid, email: user.email });
+    } else {
+        localStorage.removeItem('user');
+    }
+});
+
+// Exit game
+document.getElementById('exitGameButton').addEventListener('click', async () => { 
+    const userConfirmed = window.confirm("Are you sure? Game progress will not be saved.");
+
+    if (userConfirmed) {
+        window.location.href = 'home.html';
+    } else {
+        console.log("User canceled the exit.");
+    }
+});
+
+// Load save game
+
+// Check for a saved game state in localStorage and load it
+function loadSavedGameState() {
+    const savedGameState = JSON.parse(localStorage.getItem('loadedGameState'));
+    if (savedGameState) {
+        const boardArray = JSON.parse(savedGameState.gameState.board);
+        grid = createBoard(boardArray.length, boardArray[0].length);
+
+        reconstructBoard(boardArray);
+
+        // Restore game state values
+        profit = savedGameState.gameState.profit;
+        upkeep = savedGameState.gameState.upkeep;
+        income = savedGameState.gameState.income;
+        counter = savedGameState.gameState.counter;
+        score = savedGameState.gameState.score;
+        turn = savedGameState.gameState.turn;
+
+        // Update UI elements
+        document.getElementById('profit').textContent = profit;
+        document.getElementById('upkeep').textContent = upkeep;
+        document.getElementById('income').textContent = income;
+        document.getElementById('counter').textContent = counter;
+        document.getElementById('score').textContent = score;
+        document.getElementById('turn').textContent = turn;
+
+        localStorage.removeItem('loadedGameState');
+
+        alert("Game loaded successfully!");
+    }
+}
+
+
+function reconstructBoard(boardArray) {
+    for (let row = 0; row < boardArray.length; row++) {
+        for (let col = 0; col < boardArray[row].length; col++) {
+            const cell = grid[row][col];
+            const cellValue = boardArray[row][col];
+            cell.innerHTML = cellValue;
+
+            if (cellValue) {
+                const buildingType = cellValue;
+                cell.dataset.building = buildingType;
+                cell.classList.add('building', buildingType); 
+            }
+        }
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', loadSavedGameState);

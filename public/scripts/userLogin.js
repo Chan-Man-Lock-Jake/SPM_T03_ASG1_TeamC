@@ -16,7 +16,6 @@ const userLogin = async () => {
 
         // Store user details in local storage
         localStorage.setItem("user", JSON.stringify(loggedInUser));
-        saveUserToLocalStorage({ uid: user.uid, email: user.email });
 
         // Redirect to home page after successful login
         window.location.href = "home.html";

@@ -203,7 +203,15 @@ function countScore(type, neighbors, row, col) {
             score = countRoad(neighbors);
             break;
     }   
+   
+    console.log(`Building at (${row}, ${col}) has score: ${score}`);
     grid[row][col].dataset.score = score;
+    updateTotalScore();
+}
+
+function updateTotalScore() {
+    score = totalScore(); // Update the global score variable
+    document.getElementById('score').textContent = score; // Update UI
 }
 
 function countResidential(neighbor) {
@@ -285,8 +293,7 @@ function addBuilding(row, col, type) {
     const cell = grid[row][col];
     cell.innerHTML = `${type}`;
     cell.dataset.building = type;
-    cell.dataset.score = score;
-    cell.classList.add('building');
+    cell.classList.add('building', type);
 
     // Neighbors of the building placed
     let neighbors = [
@@ -316,7 +323,8 @@ function addBuilding(row, col, type) {
     countScore(type, neighbors, row, col);
     countIncome(type, neighbors);
     countUpkeep();
-    scoreElement.textContent = totalScore();
+
+    updateTotalScore(); 
 
     if(isOnBorder(row, col)) {
         expandGrid();
@@ -472,6 +480,7 @@ function saveUserToLocalStorage(user) {
     localStorage.setItem('user', JSON.stringify(user));
 }
 
+// Save game
 document.getElementById('saveGameButton').addEventListener('click', async () => {
     const fileName = (prompt("Enter a name for the saved game:") || "").trim();
 
@@ -522,6 +531,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+// Exit game
 document.getElementById('exitGameButton').addEventListener('click', async () => { 
     const userConfirmed = window.confirm("Are you sure? Game progress will not be saved.");
 
@@ -531,3 +541,56 @@ document.getElementById('exitGameButton').addEventListener('click', async () => 
         console.log("User canceled the exit.");
     }
 });
+
+// Load save game
+
+// Check for a saved game state in localStorage and load it
+function loadSavedGameState() {
+    const savedGameState = JSON.parse(localStorage.getItem('loadedGameState'));
+    if (savedGameState) {
+        const boardArray = JSON.parse(savedGameState.gameState.board);
+        grid = createBoard(boardArray.length, boardArray[0].length);
+
+        reconstructBoard(boardArray);
+
+        // Restore game state values
+        profit = savedGameState.gameState.profit;
+        upkeep = savedGameState.gameState.upkeep;
+        income = savedGameState.gameState.income;
+        counter = savedGameState.gameState.counter;
+        score = savedGameState.gameState.score;
+        turn = savedGameState.gameState.turn;
+
+        // Update UI elements
+        document.getElementById('profit').textContent = profit;
+        document.getElementById('upkeep').textContent = upkeep;
+        document.getElementById('income').textContent = income;
+        document.getElementById('counter').textContent = counter;
+        document.getElementById('score').textContent = score;
+        document.getElementById('turn').textContent = turn;
+
+        localStorage.removeItem('loadedGameState');
+
+        alert("Game loaded successfully!");
+    }
+}
+
+
+function reconstructBoard(boardArray) {
+    for (let row = 0; row < boardArray.length; row++) {
+        for (let col = 0; col < boardArray[row].length; col++) {
+            const cell = grid[row][col];
+            const cellValue = boardArray[row][col];
+            cell.innerHTML = cellValue;
+
+            if (cellValue) {
+                const buildingType = cellValue;
+                cell.dataset.building = buildingType;
+                cell.classList.add('building', buildingType); 
+            }
+        }
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', loadSavedGameState);
